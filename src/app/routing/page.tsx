@@ -39,7 +39,7 @@ export default function RoutingPage() {
       </Typography>
       
       <Typography variant="subtitle1" sx={{ mb: 4 }} color="text.secondary">
-        Task 1 — compares Dijkstra&apos;s algorithm and A* search on the same route.
+        Task 1 - compares Dijkstra's algorithm and A* search on the same route.
       </Typography>
 
       <Paper variant="outlined" sx={{ p: 3 }}>
