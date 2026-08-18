@@ -25,6 +25,18 @@ export interface RouteResult {
   pathFound: boolean;
 }
 
+export async function getNetworkNodes(): Promise<RouteNode[]> {
+  const response = await fetch(`${API_BASE_URL}/nodes`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch network nodes: ${response.status}`);
+  }
+  return response.json();
+}
+
 export async function getShortestPath(request: RouteRequest): Promise<RouteResult> {
   const response = await fetch(`${API_BASE_URL}/shortest-path`, {
     method: "POST",
