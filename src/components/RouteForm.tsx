@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getNetworkNodes, RouteNode } from "@/lib/api";
 import Stack from "@mui/material/Stack";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
@@ -14,17 +15,43 @@ interface RouteFormProps {
   loading: boolean;
 }
 
-const SAMPLE_NODES = [
-  { id: 1, name: "City Hospital" },
-  { id: 2, name: "Junction A" },
-  { id: 3, name: "Junction B" },
-  { id: 4, name: "Ambulance Depot 1" },
-  { id: 5, name: "General Hospital" },
+const FALLBACK_NODES: RouteNode[] = [
+  { id: 1, name: "City Hospital", type: "HOSPITAL" },
+  { id: 2, name: "Junction A", type: "JUNCTION" },
+  { id: 3, name: "Junction B", type: "JUNCTION" },
+  { id: 4, name: "Ambulance Depot 1", type: "DEPOT" },
+  { id: 5, name: "General Hospital", type: "HOSPITAL" },
 ];
 
 export default function RouteForm({ onSubmit, loading }: RouteFormProps) {
-  const [sourceId, setSourceId] = useState(4);
-  const [destinationId, setDestinationId] = useState(1);
+  const [nodes, setNodes] = useState<RouteNode[]>(FALLBACK_NODES);
+  const [sourceId, setSourceId] = useState<number>(4);
+  const [destinationId, setDestinationId] = useState<number>(1);
+
+  useEffect(() => {
+    getNetworkNodes()
+      .then((data) => {
+        if (data && data.length > 0) {
+          setNodes(data);
+          
+          // Check if our currently selected sourceId and destinationId exist in the new list.
+          const hasSource = data.some((n) => n.id === sourceId);
+          const hasDestination = data.some((n) => n.id === destinationId);
+
+          if (!hasSource || !hasDestination) {
+            // Find a depot and a hospital for a meaningful default route
+            const depot = data.find((n) => n.type === "DEPOT") || data[0];
+            const hospital = data.find((n) => n.type === "HOSPITAL" && n.id !== depot.id) || data[1] || data[0];
+            
+            setSourceId(depot.id);
+            setDestinationId(hospital.id);
+          }
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load real network nodes, using fallback sample data", err);
+      });
+  }, []);
 
   return (
     <Stack
@@ -40,7 +67,7 @@ export default function RouteForm({ onSubmit, loading }: RouteFormProps) {
           value={sourceId}
           onChange={(e) => setSourceId(Number(e.target.value))}
         >
-          {SAMPLE_NODES.map((n) => (
+          {nodes.map((n) => (
             <MenuItem key={n.id} value={n.id}>
               {n.name}
             </MenuItem>
@@ -56,7 +83,7 @@ export default function RouteForm({ onSubmit, loading }: RouteFormProps) {
           value={destinationId}
           onChange={(e) => setDestinationId(Number(e.target.value))}
         >
-          {SAMPLE_NODES.map((n) => (
+          {nodes.map((n) => (
             <MenuItem key={n.id} value={n.id}>
               {n.name}
             </MenuItem>
