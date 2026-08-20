@@ -1,7 +1,6 @@
 "use client";
 
 
-// Route: /allocation
 
 import { useState } from "react";
 import Container from "@mui/material/Container";
