@@ -27,7 +27,11 @@ export default function AllocationForm({ onSubmit, loading }: AllocationFormProp
   const [resourceType, setResourceType] = useState("AMBULANCE");
 
   return (
-    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems={{ sm: "flex-end" }}>
+    <Stack
+      direction={{ xs: "column", sm: "row" }}
+      spacing={2}
+      sx={{ alignItems: { xs: "stretch", sm: "flex-end" } }}
+    >
       <FormControl size="small" sx={{ minWidth: 220 }}>
         <InputLabel id="resource-type-label">Resource Type</InputLabel>
         <Select

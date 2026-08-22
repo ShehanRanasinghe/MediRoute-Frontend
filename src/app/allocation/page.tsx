@@ -25,7 +25,7 @@ export default function AllocationPage() {
       const results = await compareAllocationAlgorithms(resourceType);
       setGreedyResult(results.greedy);
       setKnapsackResult(results.knapsack);
-    } catch (err) {
+    } catch {
       setError("Could not reach the allocation service. Is the Spring Boot backend running on port 8080?");
     } finally {
       setLoading(false);
@@ -37,7 +37,7 @@ export default function AllocationPage() {
       <Typography variant="h1" gutterBottom>
         Hospital Resource & Ambulance Allocation
       </Typography>
-      <Typography variant="subtitle1" mb={4}>
+      <Typography variant="subtitle1" sx={{ mb: 4 }}>
         Task 2 — compares Greedy allocation and 0/1 Knapsack DP on the same pending requests.
       </Typography>
 
@@ -46,7 +46,7 @@ export default function AllocationPage() {
       </Paper>
 
       {error && (
-        <Box mt={3}>
+        <Box sx={{ mt: 3 }}>
           <Alert severity="error">{error}</Alert>
         </Box>
       )}

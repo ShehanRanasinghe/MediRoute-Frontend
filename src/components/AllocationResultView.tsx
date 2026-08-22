@@ -25,7 +25,10 @@ function ResultCard({ result }: { result: AllocationResult }) {
   return (
     <Card variant="outlined" sx={{ flex: 1, minWidth: 260 }}>
       <CardContent>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
+        <Stack
+          direction="row"
+          sx={{ justifyContent: "space-between", alignItems: "center", mb: 1 }}
+        >
           <Typography variant="h2">{result.algorithmUsed}</Typography>
           <Chip label={formatTime(result.executionTimeNanos)} size="small" color="secondary" variant="outlined" />
         </Stack>
@@ -33,14 +36,14 @@ function ResultCard({ result }: { result: AllocationResult }) {
         <Typography variant="body2" color="text.secondary">
           Total Value Achieved
         </Typography>
-        <Typography variant="h6" mb={1}>
+        <Typography variant="h6" sx={{ mb: 1 }}>
           {result.totalValueAchieved}
         </Typography>
 
         <Typography variant="body2" color="text.secondary">
           Capacity Used: {result.capacityUsed} / {result.totalCapacity}
         </Typography>
-        <Box mb={1}>
+        <Box sx={{ mb: 1 }}>
           <LinearProgress variant="determinate" value={utilization} sx={{ height: 8, borderRadius: 4 }} />
         </Box>
 
@@ -61,7 +64,7 @@ export default function AllocationResultView({ greedy, knapsack }: AllocationRes
   if (!greedy && !knapsack) return null;
 
   return (
-    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mt={3}>
+    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mt: 3 }}>
       {greedy && <ResultCard result={greedy} />}
       {knapsack && <ResultCard result={knapsack} />}
     </Stack>
