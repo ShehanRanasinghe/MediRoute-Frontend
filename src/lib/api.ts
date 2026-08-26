@@ -1,6 +1,8 @@
-import axios from "axios";
+// Shared backend root — set NEXT_PUBLIC_BACKEND_URL in .env.local to override.
+export const BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api/routing";
+const API_BASE_URL = `${BACKEND_URL}/api/routing`;
 
 export interface RouteNode {
   id: number;

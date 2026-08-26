@@ -1,6 +1,6 @@
+import { BACKEND_URL } from "./api";
 
-
-const API_BASE_URL = "http://localhost:8080/api/allocation";
+const API_BASE_URL = `${BACKEND_URL}/api/allocation`;
 
 export interface PatientIncident {
   id: number;

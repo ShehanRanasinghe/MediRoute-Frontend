@@ -1,6 +1,6 @@
 // Owner: Integration
-
-const API_BASE_URL = "http://localhost:8080/api/incident";
+import { BACKEND_URL } from "./api";
+const API_BASE_URL = `${BACKEND_URL}/api/incident`;
 
 export interface HospitalRecommendation {
   hospitalId: number;
@@ -26,6 +26,8 @@ export interface DispatchPlanView {
   capacityUsed: number;
   totalCapacity: number;
   algorithmUsed: string;
+  /** Set by backend when no ambulance was dispatched — explains why the plan is empty. */
+  note?: string;
 }
 
 export interface IncidentResponse {

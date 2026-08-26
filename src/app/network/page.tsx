@@ -3,7 +3,7 @@
 // Owner: Janiru
 // Route: /network
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Alert from "@mui/material/Alert";
@@ -14,6 +14,7 @@ import AnalyticsIcon from "@mui/icons-material/Analytics";
 import CriticalNodesCard from "../../components/CriticalNodesCard";
 import MSTCard from "../../components/MSTCard";
 import CentralityRankingCard from "../../components/CentralityRankingCard";
+import { getNetworkNodes, RouteNode } from "../../lib/api";
 import {
   getCriticalNodes,
   getMST,
@@ -29,6 +30,21 @@ export default function NetworkAnalysisPage() {
   const [centrality, setCentrality] = useState<CentralityResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [nodeMap, setNodeMap] = useState<Record<number, string>>({});
+
+  useEffect(() => {
+    getNetworkNodes()
+      .then((nodes: RouteNode[]) => {
+        const map: Record<number, string> = {};
+        nodes.forEach((n) => {
+          map[n.id] = n.name;
+        });
+        setNodeMap(map);
+      })
+      .catch(() => {
+        // Non-fatal — card will fallback to "Node #ID" labels
+      });
+  }, []);
 
   async function runAnalysis() {
     setLoading(true);
@@ -54,7 +70,7 @@ export default function NetworkAnalysisPage() {
       <Typography variant="h1" gutterBottom>
         Hospital Referral Network Resilience
       </Typography>
-      <Typography variant="subtitle1" mb={4}>
+      <Typography variant="subtitle1" sx={{ mb: 4 }}>
         Task 3 — finds critical nodes, the backbone network, and ranks nodes by importance.
       </Typography>
 
@@ -69,16 +85,17 @@ export default function NetworkAnalysisPage() {
       </Button>
 
       {error && (
-        <Box mb={3}>
+        <Box sx={{ mb: 3 }}>
           <Alert severity="error">{error}</Alert>
         </Box>
       )}
 
       <Stack spacing={3}>
-        {criticalNodes && <CriticalNodesCard result={criticalNodes} />}
-        {mst && <MSTCard result={mst} />}
+        {criticalNodes && <CriticalNodesCard result={criticalNodes} nodeMap={nodeMap} />}
+        {mst && <MSTCard result={mst} nodeMap={nodeMap} />}
         {centrality && <CentralityRankingCard result={centrality} />}
       </Stack>
     </Container>
   );
 }
+

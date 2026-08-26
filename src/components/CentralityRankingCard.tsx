@@ -20,7 +20,7 @@ export default function CentralityRankingCard({ result }: { result: CentralityRe
   return (
     <Card variant="outlined">
       <CardContent>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
+        <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center", mb: 1 }}>
           <Typography variant="h2">Node Importance Ranking</Typography>
           <Chip label={formatTime(result.executionTimeNanos)} size="small" color="secondary" variant="outlined" />
         </Stack>

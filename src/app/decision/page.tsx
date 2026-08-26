@@ -43,7 +43,7 @@ export default function DecisionPage() {
       <Typography variant="h1" gutterBottom>
         Best Hospital Recommendation
       </Typography>
-      <Typography variant="subtitle1" mb={4}>
+      <Typography variant="subtitle1" sx={{ mb: 4 }}>
         Task 4 — ranks hospitals by specialty match, distance, and bed availability.
       </Typography>
 
@@ -52,7 +52,7 @@ export default function DecisionPage() {
       </Paper>
 
       {error && (
-        <Box mt={3}>
+        <Box sx={{ mt: 3 }}>
           <Alert severity="error">{error}</Alert>
         </Box>
       )}

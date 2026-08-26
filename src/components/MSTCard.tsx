@@ -15,11 +15,17 @@ function formatTime(nanos: number): string {
   return `${(nanos / 1_000_000).toFixed(3)} ms`;
 }
 
-export default function MSTCard({ result }: { result: MSTResult }) {
+export default function MSTCard({
+  result,
+  nodeMap = {},
+}: {
+  result: MSTResult;
+  nodeMap?: Record<number, string>;
+}) {
   return (
     <Card variant="outlined">
       <CardContent>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
+        <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center", mb: 1 }}>
           <Typography variant="h2">Backbone Network (MST)</Typography>
           <Chip label={formatTime(result.executionTimeNanos)} size="small" color="secondary" variant="outlined" />
         </Stack>
@@ -27,7 +33,7 @@ export default function MSTCard({ result }: { result: MSTResult }) {
         <Typography variant="body2" color="text.secondary">
           Total Backbone Length
         </Typography>
-        <Typography variant="h6" mb={1}>
+        <Typography variant="h6" sx={{ mb: 1 }}>
           {result.totalWeightKm.toFixed(2)} km ({result.edges.length} road{result.edges.length === 1 ? "" : "s"})
         </Typography>
 
@@ -37,7 +43,7 @@ export default function MSTCard({ result }: { result: MSTResult }) {
           {result.edges.map((edge, index) => (
             <ListItem key={index} disableGutters>
               <ListItemText
-                primary={`Node ${edge.fromNodeId} \u2192 Node ${edge.toNodeId}`}
+                primary={`${nodeMap[edge.fromNodeId] ?? `Node #${edge.fromNodeId}`} → ${nodeMap[edge.toNodeId] ?? `Node #${edge.toNodeId}`}`}
                 secondary={`${edge.weightKm.toFixed(2)} km`}
               />
             </ListItem>

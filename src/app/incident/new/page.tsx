@@ -70,7 +70,7 @@ export default function NewIncidentPage() {
       <Typography variant="h4" gutterBottom>
         Report Emergency Incident
       </Typography>
-      <Typography variant="body2" color="text.secondary" mb={3}>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         Enter the incident details below. The system finds the best hospital, plans the ambulance
         route, assigns a resource, and prepares a supply loadout automatically.
       </Typography>
@@ -146,7 +146,7 @@ export default function NewIncidentPage() {
 
           <Card variant="outlined">
             <CardContent>
-              <Stack direction="row" alignItems="center" spacing={1} mb={1}>
+              <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 1 }}>
                 <LocalHospitalIcon color="primary" />
                 <Typography variant="h6">Hospital Match</Typography>
               </Stack>
@@ -167,7 +167,7 @@ export default function NewIncidentPage() {
 
           <Card variant="outlined">
             <CardContent>
-              <Stack direction="row" alignItems="center" spacing={1} mb={1}>
+              <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 1 }}>
                 <RouteIcon color="primary" />
                 <Typography variant="h6">Dispatch Route</Typography>
               </Stack>
@@ -190,7 +190,7 @@ export default function NewIncidentPage() {
 
           <Card variant="outlined">
             <CardContent>
-              <Stack direction="row" alignItems="center" spacing={1} mb={1}>
+              <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 1 }}>
                 {result.ambulanceAllocated ? (
                   <CheckCircleIcon color="success" />
                 ) : (
@@ -208,18 +208,26 @@ export default function NewIncidentPage() {
 
           <Card variant="outlined">
             <CardContent>
-              <Stack direction="row" alignItems="center" spacing={1} mb={1}>
+              <Stack direction="row" spacing={1} sx={{ alignItems: "center", mb: 1 }}>
                 <LocalShippingIcon color="primary" />
                 <Typography variant="h6">Dispatch Supply Plan</Typography>
               </Stack>
-              <Typography variant="body2" color="text.secondary" mb={1}>
-                {result.dispatchPlan.capacityUsed} / {result.dispatchPlan.totalCapacity} vehicle capacity used
-              </Typography>
-              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-                {result.dispatchPlan.selectedItemNames.map((name) => (
-                  <Chip key={name} label={name} size="small" />
-                ))}
-              </Stack>
+              {result.dispatchPlan.note ? (
+                <Typography variant="body2" color="text.secondary">
+                  {result.dispatchPlan.note}
+                </Typography>
+              ) : (
+                <>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                    {result.dispatchPlan.capacityUsed} / {result.dispatchPlan.totalCapacity} vehicle capacity used
+                  </Typography>
+                  <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap" }}>
+                    {result.dispatchPlan.selectedItemNames.map((name) => (
+                      <Chip key={name} label={name} size="small" />
+                    ))}
+                  </Stack>
+                </>
+              )}
             </CardContent>
           </Card>
         </Stack>

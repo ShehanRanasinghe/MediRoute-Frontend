@@ -26,7 +26,7 @@ export default function RecommendationForm({ onSubmit, loading }: Recommendation
   const [longitude, setLongitude] = useState(79.8625);
 
   return (
-    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems={{ sm: "flex-end" }} flexWrap="wrap" useFlexGap>
+    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ alignItems: { sm: "flex-end" }, flexWrap: "wrap" }}>
       <FormControl size="small" sx={{ minWidth: 160 }}>
         <InputLabel id="condition-label">Condition</InputLabel>
         <Select

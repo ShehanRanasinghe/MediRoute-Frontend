@@ -1,6 +1,6 @@
 // Owner: Janiru
-
-const API_BASE_URL = "http://localhost:8080/api/network";
+import { BACKEND_URL } from "./api";
+const API_BASE_URL = `${BACKEND_URL}/api/network`;
 
 export interface CriticalNodeResult {
   criticalNodeIds: number[];

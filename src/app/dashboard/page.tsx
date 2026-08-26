@@ -39,8 +39,8 @@ export default function DashboardPage() {
 
       {summary && (
         <>
-          <Grid container spacing={2} mb={3}>
-            <Grid item xs={12} sm={4}>
+          <Grid container spacing={2} sx={{ mb: 3 }}>
+            <Grid size={{ xs: 12, sm: 4 }}>
               <Card variant="outlined">
                 <CardContent>
                   <Typography variant="body2" color="text.secondary">Pending Incidents</Typography>
@@ -48,7 +48,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid size={{ xs: 12, sm: 4 }}>
               <Card variant="outlined">
                 <CardContent>
                   <Typography variant="body2" color="text.secondary">Available Ambulances</Typography>
@@ -56,7 +56,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
             </Grid>
-            <Grid item xs={12} sm={4}>
+            <Grid size={{ xs: 12, sm: 4 }}>
               <Card variant="outlined">
                 <CardContent>
                   <Typography variant="body2" color="text.secondary">Network Risk Points</Typography>
