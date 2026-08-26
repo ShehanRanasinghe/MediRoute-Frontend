@@ -1,14 +1,7 @@
-"use client";
+// Owner: Integration
+// Root route redirects straight into the dashboard - no login step.
+import { redirect } from "next/navigation";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push("/routing");
-  }, [router]);
-
-  return null;
+export default function RootPage() {
+  redirect("/dashboard");
 }
