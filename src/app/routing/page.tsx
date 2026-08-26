@@ -10,15 +10,16 @@ import RouteForm from "@/components/RouteForm";
 import RouteResultView from "@/components/RouteResultView";
 import { compareAlgorithms, getNetworkNodes, RouteResult, RouteNode } from "@/lib/api";
 
+// The two route results are kept side by side so the evaluator can compare route quality and speed directly.
 export default function RoutingPage() {
   const [dijkstraResult, setDijkstraResult] = useState<RouteResult | null>(null);
   const [astarResult, setAstarResult] = useState<RouteResult | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  // nodeMap built from the /api/routing/nodes endpoint so path IDs resolve to names
+  // This map converts node ids into readable names so the route path is easier to understand.
   const [nodeMap, setNodeMap] = useState<Record<number, string>>({});
 
-  // Load nodes once on mount — same call that RouteForm already makes, shared here
+  // Network data is fetched once on mount so the route labels remain human-readable without repeated backend calls.
   useEffect(() => {
     getNetworkNodes()
       .then((nodes: RouteNode[]) => {
@@ -53,7 +54,7 @@ export default function RoutingPage() {
       </Typography>
 
       <Typography variant="subtitle1" sx={{ mb: 4 }} color="text.secondary">
-        Task 1 — compares Dijkstra&apos;s algorithm and A* search on the same route.
+        Task 1 - compares Dijkstra&apos;s algorithm and A* search on the same route.
       </Typography>
 
       <Paper variant="outlined" sx={{ p: 3 }}>

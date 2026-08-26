@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Alert from "@mui/material/Alert";
 import { OptimizationResult } from "../lib/optimizationApi";
 
+// Displays the output of each optimization method in a simple comparison view.
 function formatTime(nanos: number): string {
   return `${(nanos / 1_000_000).toFixed(3)} ms`;
 }

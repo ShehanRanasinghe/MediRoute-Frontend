@@ -1,5 +1,3 @@
-// Owner: Janiru
-
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -12,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { CentralityResult } from "../lib/networkApi";
 
+// Ranks the most important network nodes based on their connectedness.
 function formatTime(nanos: number): string {
   return `${(nanos / 1_000_000).toFixed(3)} ms`;
 }

@@ -1,7 +1,5 @@
 "use client";
 
-
-
 import { useState } from "react";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
@@ -12,12 +10,15 @@ import AllocationForm from "../../components/AllocationForm";
 import AllocationResultView from "../../components/AllocationResultView";
 import { compareAllocationAlgorithms, AllocationResult } from "../../lib/allocationApi";
 
+// Greedy and knapsack results are displayed together so the trade-off between speed and optimality stands out.
 export default function AllocationPage() {
+  // States store the result from each algorithm and the loading state for the request.
   const [greedyResult, setGreedyResult] = useState<AllocationResult | null>(null);
   const [knapsackResult, setKnapsackResult] = useState<AllocationResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // The selected resource is sent to the backend after the user clicks run, then both comparison results are refreshed in place.
   async function handleSubmit(resourceType: string) {
     setLoading(true);
     setError(null);
@@ -38,7 +39,7 @@ export default function AllocationPage() {
         Hospital Resource & Ambulance Allocation
       </Typography>
       <Typography variant="subtitle1" sx={{ mb: 4 }}>
-        Task 2 — compares Greedy allocation and 0/1 Knapsack DP on the same pending requests.
+        Task 2 - compares Greedy allocation and 0/1 Knapsack DP on the same pending requests.
       </Typography>
 
       <Paper variant="outlined" sx={{ p: 3 }}>

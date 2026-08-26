@@ -1,5 +1,6 @@
 import { BACKEND_URL } from "./api";
 
+// Module calls the allocation backend endpoints and defines the response structure for allocation results.
 const API_BASE_URL = `${BACKEND_URL}/api/allocation`;
 
 export interface PatientIncident {

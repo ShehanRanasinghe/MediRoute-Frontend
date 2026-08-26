@@ -1,5 +1,3 @@
-// Owner: Manura
-
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -17,6 +15,7 @@ interface RecommendationResultViewProps {
   fullSort: RecommendationResult | null;
 }
 
+// Compares the execution time of the heap-based and full-sort ranking methods.
 function formatTime(nanos: number): string {
   return `${(nanos / 1_000_000).toFixed(3)} ms`;
 }

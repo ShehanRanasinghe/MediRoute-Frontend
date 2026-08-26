@@ -1,11 +1,6 @@
 "use client";
 
-// Owner: Integration
-// UPDATED: Dispatch Supply Plan card now shows `note` when no plan was
-// computed (e.g. no ambulance was assigned), instead of a blank/misleading
-// empty state.
-// Route: /incident/new
-
+// Emergency data is collected here before the dispatch pipeline matches a patient to a hospital, route, and supplies.
 import { useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -39,6 +34,8 @@ const LOCATION_PRESETS = [
 ];
 
 export default function NewIncidentPage() {
+  // These fields hold the patient details used to create a realistic emergency case for the dispatch pipeline.
+  // The severity slider and location preset help simulate a realistic emergency without leaving the form.
   const [patientReference, setPatientReference] = useState("");
   const [conditionType, setConditionType] = useState("CARDIAC");
   const [severity, setSeverity] = useState(7);
@@ -47,6 +44,8 @@ export default function NewIncidentPage() {
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<IncidentResponse | null>(null);
 
+  // The request is built from the selected preset location and the emergency severity so the backend can process one full response.
+  // The result is stored only after the backend responds, which keeps the UI clean while the request is still running.
   async function handleSubmit() {
     setLoading(true);
     setError(null);

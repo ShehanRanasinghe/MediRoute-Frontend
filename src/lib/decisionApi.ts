@@ -1,5 +1,6 @@
-// Owner: Manura
 import { BACKEND_URL } from "./api";
+
+// Module sends hospital recommendation requests to the decision service and maps the backend response.
 const API_BASE_URL = `${BACKEND_URL}/api/decision`;
 
 export interface HospitalRecommendation {
