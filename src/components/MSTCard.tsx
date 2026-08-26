@@ -1,5 +1,3 @@
-// Owner: Janiru
-
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -11,6 +9,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import { MSTResult } from "../lib/networkApi";
 
+// Shows the minimum spanning tree that keeps the network connected with the lowest total cost.
 function formatTime(nanos: number): string {
   return `${(nanos / 1_000_000).toFixed(3)} ms`;
 }

@@ -1,6 +1,3 @@
-// Owner: Integration
-// Route: /algorithms - index of individual algorithm demos for testing/viva use
-
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
@@ -9,6 +6,8 @@ import CardActionArea from "@mui/material/CardActionArea";
 import CardContent from "@mui/material/CardContent";
 import Link from "next/link";
 
+// Array lists each algorithm demo page so the user can switch between them quickly.
+// Each entry points to a single algorithm demo that can be tested independently during viva or review.
 const PAGES = [
   { title: "Route Comparison", desc: "Dijkstra vs A* pathfinding", href: "/routing" },
   { title: "Resource Allocation", desc: "Greedy vs Knapsack DP", href: "/allocation" },
@@ -17,6 +16,8 @@ const PAGES = [
   { title: "Dispatch Optimization", desc: "Dynamic Programming vs Backtracking vs Greedy", href: "/optimization" },
 ];
 
+// The index card layout makes each algorithm easy to compare during demonstrations and viva sessions.
+// The card grid gives a quick overview of the comparison pages so the evaluator can switch between problems easily.
 export default function AlgorithmsIndexPage() {
   return (
     <Container maxWidth="md">

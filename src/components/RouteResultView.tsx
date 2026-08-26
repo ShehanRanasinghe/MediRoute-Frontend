@@ -10,7 +10,7 @@ import { RouteResult } from "../lib/api";
 interface RouteResultViewProps {
   dijkstra: RouteResult | null;
   astar: RouteResult | null;
-  /** Map of nodeId → nodeName, used to render human-readable path labels. */
+  /** Map of nodeId -> nodeName, used to render human-readable path labels. */
   nodeMap?: Record<number, string>;
 }
 
@@ -93,4 +93,4 @@ export default function RouteResultView({ dijkstra, astar, nodeMap }: RouteResul
       {astar && <ResultCard result={astar} nodeMap={nodeMap} />}
     </Stack>
   );
-}
+}

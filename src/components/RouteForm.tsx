@@ -10,6 +10,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import RouteIcon from "@mui/icons-material/AltRoute";
 
+// This form collects the origin and destination points for the route comparison action.
 interface RouteFormProps {
   onSubmit: (sourceId: number, destinationId: number) => void;
   loading: boolean;
@@ -23,11 +24,13 @@ const FALLBACK_NODES: RouteNode[] = [
   { id: 5, name: "General Hospital", type: "HOSPITAL" },
 ];
 
+// The selected source and destination are kept in state and updated when the backend data is loaded.
 export default function RouteForm({ onSubmit, loading }: RouteFormProps) {
   const [nodes, setNodes] = useState<RouteNode[]>(FALLBACK_NODES);
   const [sourceId, setSourceId] = useState<number>(4);
   const [destinationId, setDestinationId] = useState<number>(1);
 
+  // The app loads the real network data and keeps sensible defaults if the backend is unavailable.
   useEffect(() => {
     getNetworkNodes()
       .then((data) => {

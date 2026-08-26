@@ -10,6 +10,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Box from "@mui/material/Box";
 import { AllocationResult } from "../lib/allocationApi";
 
+// Result panel shows the outcome of both allocation algorithms side by side.
 interface AllocationResultViewProps {
   greedy: AllocationResult | null;
   knapsack: AllocationResult | null;
@@ -19,6 +20,7 @@ function formatTime(nanos: number): string {
   return `${(nanos / 1_000_000).toFixed(3)} ms`;
 }
 
+// A single card displays the total score, capacity use, and count of placed requests for one algorithm.
 function ResultCard({ result }: { result: AllocationResult }) {
   const utilization = result.totalCapacity === 0 ? 0 : (result.capacityUsed / result.totalCapacity) * 100;
 

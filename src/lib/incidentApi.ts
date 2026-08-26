@@ -1,6 +1,6 @@
-// Owner: Integration
-// UPDATED: added resetDemoData(), and DispatchPlanView now includes `note`.
 import { BACKEND_URL } from "./api";
+
+// Module handles emergency incident reporting, dashboard status, and the demo-data reset endpoint.
 const API_BASE_URL = `${BACKEND_URL}/api/incident`;
 const ADMIN_BASE_URL = `${BACKEND_URL}/api/admin`;
 

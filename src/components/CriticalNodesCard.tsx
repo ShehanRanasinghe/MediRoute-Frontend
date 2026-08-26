@@ -1,5 +1,3 @@
-// Owner: Janiru
-
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -8,6 +6,7 @@ import Chip from "@mui/material/Chip";
 import Alert from "@mui/material/Alert";
 import { CriticalNodeResult } from "../lib/networkApi";
 
+// Highlights the nodes that are critical to network connectivity.
 function formatTime(nanos: number): string {
   return `${(nanos / 1_000_000).toFixed(3)} ms`;
 }

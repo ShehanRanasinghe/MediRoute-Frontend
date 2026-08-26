@@ -1,8 +1,5 @@
 "use client";
 
-// Owner: Integration
-// Plain layout shell - no login/session gating. See README for why.
-
 import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
@@ -19,6 +16,7 @@ import LocalHospitalIcon from "@mui/icons-material/LocalHospital";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+// Shell creates the shared navigation drawer and top app bar for the whole application.
 const DRAWER_WIDTH = 240;
 
 const NAV_ITEMS = [
@@ -27,6 +25,7 @@ const NAV_ITEMS = [
   { label: "Algorithm Explorer", href: "/algorithms", icon: <InsightsIcon /> },
 ];
 
+// The current page route is tracked so the selected nav item can be highlighted correctly.
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 

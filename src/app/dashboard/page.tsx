@@ -1,9 +1,6 @@
 "use client";
 
-// Owner: Integration
-// UPDATED: added a Reset Demo Data button with a confirmation dialog.
-// Route: /dashboard - the Control Room
-
+// The control room combines live system metrics and risk warnings into one overview screen.
 import { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -27,6 +24,7 @@ import DialogActions from "@mui/material/DialogActions";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import { getDashboardSummary, resetDemoData, DashboardSummary } from "../../lib/incidentApi";
 
+// Dashboard metrics are kept in local state so the control room refreshes quickly after each backend call.
 export default function DashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +32,7 @@ export default function DashboardPage() {
   const [resetting, setResetting] = useState(false);
   const [resetMessage, setResetMessage] = useState<string | null>(null);
 
+  // The summary request runs whenever the screen loads or after a reset, keeping the operator view in sync.
   function loadSummary() {
     getDashboardSummary()
       .then(setSummary)
@@ -44,6 +43,7 @@ export default function DashboardPage() {
     loadSummary();
   }, []);
 
+  // Clears demo data and refreshes the dashboard so the system returns to a clean state.
   async function handleReset() {
     setResetting(true);
     setResetMessage(null);
@@ -59,6 +59,7 @@ export default function DashboardPage() {
     }
   }
 
+  // The top bar keeps the reset control close to the heading for fast operator access.
   return (
     <Container maxWidth="lg">
       <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center", mb: 2 }}>

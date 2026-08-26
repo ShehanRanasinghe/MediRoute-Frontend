@@ -1,5 +1,6 @@
-// Owner: Janiru
 import { BACKEND_URL } from "./api";
+
+// Communicates with the network analysis endpoints for resilience and ranking calculations.
 const API_BASE_URL = `${BACKEND_URL}/api/network`;
 
 export interface CriticalNodeResult {
