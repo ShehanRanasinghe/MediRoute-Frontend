@@ -1,6 +1,7 @@
 "use client";
 
 // Owner: Integration
+// UPDATED: added a Reset Demo Data button with a confirmation dialog.
 // Route: /dashboard - the Control Room
 
 import { useEffect, useState } from "react";
@@ -16,24 +17,63 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import LinearProgress from "@mui/material/LinearProgress";
-import { getDashboardSummary, DashboardSummary } from "../../lib/incidentApi";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogActions from "@mui/material/DialogActions";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import { getDashboardSummary, resetDemoData, DashboardSummary } from "../../lib/incidentApi";
 
 export default function DashboardPage() {
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [resetting, setResetting] = useState(false);
+  const [resetMessage, setResetMessage] = useState<string | null>(null);
 
-  useEffect(() => {
+  function loadSummary() {
     getDashboardSummary()
       .then(setSummary)
       .catch(() => setError("Could not reach the backend. Is Spring Boot running on port 8080?"));
+  }
+
+  useEffect(() => {
+    loadSummary();
   }, []);
+
+  async function handleReset() {
+    setResetting(true);
+    setResetMessage(null);
+    try {
+      await resetDemoData();
+      setResetMessage("Demo data reset - all incidents cleared, all resources and supply items restored.");
+      loadSummary();
+    } catch (err) {
+      setResetMessage("Reset failed - is the backend running?");
+    } finally {
+      setResetting(false);
+      setConfirmOpen(false);
+    }
+  }
 
   return (
     <Container maxWidth="lg">
-      <Typography variant="h4" gutterBottom>
-        Control Room
-      </Typography>
+      <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+        <Typography variant="h4">Control Room</Typography>
+        <Button
+          variant="outlined"
+          color="secondary"
+          startIcon={<RestartAltIcon />}
+          onClick={() => setConfirmOpen(true)}
+        >
+          Reset Demo Data
+        </Button>
+      </Stack>
 
+      {resetMessage && <Alert severity="info" sx={{ mb: 2 }} onClose={() => setResetMessage(null)}>{resetMessage}</Alert>}
       {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
       {!summary && !error && <Typography>Loading system status...</Typography>}
 
@@ -52,7 +92,9 @@ export default function DashboardPage() {
               <Card variant="outlined">
                 <CardContent>
                   <Typography variant="body2" color="text.secondary">Available Ambulances</Typography>
-                  <Typography variant="h3">{summary.availableAmbulances}</Typography>
+                  <Typography variant="h3" color={summary.availableAmbulances === 0 ? "error.main" : "inherit"}>
+                    {summary.availableAmbulances}
+                  </Typography>
                 </CardContent>
               </Card>
             </Grid>
@@ -67,6 +109,13 @@ export default function DashboardPage() {
               </Card>
             </Grid>
           </Grid>
+
+          {summary.availableAmbulances === 0 && (
+            <Alert severity="error" sx={{ mb: 3 }}>
+              No ambulances are currently available. New incidents will still be logged and matched to
+              a hospital, but cannot be assigned a vehicle until one becomes free.
+            </Alert>
+          )}
 
           {summary.criticalNodeCount > 0 && (
             <Alert severity="warning" sx={{ mb: 3 }}>
@@ -105,6 +154,22 @@ export default function DashboardPage() {
           </Card>
         </>
       )}
+
+      <Dialog open={confirmOpen} onClose={() => setConfirmOpen(false)}>
+        <DialogTitle>Reset all demo data?</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            This clears every reported incident and restores all ambulances, beds, and supply items to
+            available. This cannot be undone.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setConfirmOpen(false)}>Cancel</Button>
+          <Button onClick={handleReset} color="secondary" variant="contained" disabled={resetting}>
+            {resetting ? "Resetting..." : "Reset"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }

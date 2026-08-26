@@ -1,6 +1,8 @@
 // Owner: Integration
+// UPDATED: added resetDemoData(), and DispatchPlanView now includes `note`.
 import { BACKEND_URL } from "./api";
 const API_BASE_URL = `${BACKEND_URL}/api/incident`;
+const ADMIN_BASE_URL = `${BACKEND_URL}/api/admin`;
 
 export interface HospitalRecommendation {
   hospitalId: number;
@@ -26,8 +28,7 @@ export interface DispatchPlanView {
   capacityUsed: number;
   totalCapacity: number;
   algorithmUsed: string;
-  /** Set by backend when no ambulance was dispatched — explains why the plan is empty. */
-  note?: string;
+  note?: string; // present only when no real plan was computed
 }
 
 export interface IncidentResponse {
@@ -76,4 +77,9 @@ export async function getDashboardSummary(): Promise<DashboardSummary> {
   const response = await fetch(`${API_BASE_URL}/dashboard-summary`);
   if (!response.ok) throw new Error(`Dashboard summary failed: ${response.status}`);
   return response.json();
+}
+
+export async function resetDemoData(): Promise<void> {
+  const response = await fetch(`${ADMIN_BASE_URL}/reset-demo-data`, { method: "POST" });
+  if (!response.ok) throw new Error(`Reset failed: ${response.status}`);
 }

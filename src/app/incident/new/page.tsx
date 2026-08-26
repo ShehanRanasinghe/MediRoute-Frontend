@@ -1,7 +1,10 @@
 "use client";
 
 // Owner: Integration
-// Route: /incident/new - the core real-world workflow
+// UPDATED: Dispatch Supply Plan card now shows `note` when no plan was
+// computed (e.g. no ambulance was assigned), instead of a blank/misleading
+// empty state.
+// Route: /incident/new
 
 import { useState } from "react";
 import Container from "@mui/material/Container";
@@ -201,7 +204,7 @@ export default function NewIncidentPage() {
               <Typography variant="body1">
                 {result.ambulanceAllocated
                   ? "An ambulance has been assigned to this incident."
-                  : "No ambulance could be assigned right now - capacity is fully committed to higher-priority incidents."}
+                  : "No ambulance could be assigned right now - all ambulances are currently committed to other incidents."}
               </Typography>
             </CardContent>
           </Card>
@@ -213,9 +216,7 @@ export default function NewIncidentPage() {
                 <Typography variant="h6">Dispatch Supply Plan</Typography>
               </Stack>
               {result.dispatchPlan.note ? (
-                <Typography variant="body2" color="text.secondary">
-                  {result.dispatchPlan.note}
-                </Typography>
+                <Alert severity="info">{result.dispatchPlan.note}</Alert>
               ) : (
                 <>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
