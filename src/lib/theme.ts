@@ -1,8 +1,8 @@
 import { createTheme } from "@mui/material/styles";
 
-// Owner: Manura
-// Same theme as Task 1/2/3 - reuse the existing lib/theme.ts if your
-// project already has one, don't create a second copy.
+// Owner: Janiru
+// Same theme as Task 1/2 - reuse the existing lib/theme.ts if your project
+// already has one, don't create a second copy.
 export const theme = createTheme({
   palette: {
     mode: "light",
