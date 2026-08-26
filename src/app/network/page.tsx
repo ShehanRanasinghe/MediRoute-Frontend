@@ -1,8 +1,5 @@
 "use client";
 
-// Owner: Janiru
-// Route: /network
-
 import { useState, useEffect } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
@@ -24,7 +21,9 @@ import {
   CentralityResult,
 } from "../../lib/networkApi";
 
+// Network analysis results are loaded together because they describe different views of the same hospital network.
 export default function NetworkAnalysisPage() {
+  // Each state holds one analysis result from the backend and the loading/error status.
   const [criticalNodes, setCriticalNodes] = useState<CriticalNodeResult | null>(null);
   const [mst, setMst] = useState<MSTResult | null>(null);
   const [centrality, setCentrality] = useState<CentralityResult | null>(null);
@@ -32,6 +31,7 @@ export default function NetworkAnalysisPage() {
   const [error, setError] = useState<string | null>(null);
   const [nodeMap, setNodeMap] = useState<Record<number, string>>({});
 
+  // Node labels are fetched once and cached locally so the result cards stay readable and consistent.
   useEffect(() => {
     getNetworkNodes()
       .then((nodes: RouteNode[]) => {
@@ -42,7 +42,7 @@ export default function NetworkAnalysisPage() {
         setNodeMap(map);
       })
       .catch(() => {
-        // Non-fatal — card will fallback to "Node #ID" labels
+        // Non-fatal - card will fallback to "Node #ID" labels
       });
   }, []);
 
@@ -71,7 +71,7 @@ export default function NetworkAnalysisPage() {
         Hospital Referral Network Resilience
       </Typography>
       <Typography variant="subtitle1" sx={{ mb: 4 }}>
-        Task 3 — finds critical nodes, the backbone network, and ranks nodes by importance.
+        Task 3 - finds critical nodes, the backbone network, and ranks nodes by importance.
       </Typography>
 
       <Button

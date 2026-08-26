@@ -1,4 +1,6 @@
 import { BACKEND_URL } from "./api";
+
+// API layer compares optimization strategies for vehicle loading and dispatch planning.
 const API_BASE_URL = `${BACKEND_URL}/api/optimization`;
 
 export interface OptimizationResult {

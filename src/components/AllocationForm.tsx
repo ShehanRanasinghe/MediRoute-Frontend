@@ -1,7 +1,5 @@
 "use client";
 
-
-
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import FormControl from "@mui/material/FormControl";
@@ -11,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import PlaylistAddCheckIcon from "@mui/icons-material/PlaylistAddCheck";
 
+// Selects the resource category to be tested by the allocation algorithms.
 interface AllocationFormProps {
   onSubmit: (resourceType: string) => void;
   loading: boolean;
@@ -23,6 +22,7 @@ const RESOURCE_TYPES = [
   { value: "VENTILATOR", label: "Ventilator" },
 ];
 
+// The chosen resource is stored in local state and sent to the comparison backend on submit.
 export default function AllocationForm({ onSubmit, loading }: AllocationFormProps) {
   const [resourceType, setResourceType] = useState("AMBULANCE");
 

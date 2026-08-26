@@ -1,4 +1,4 @@
-// Shared backend root — set NEXT_PUBLIC_BACKEND_URL in .env.local to override.
+// Defines the shared backend base URL and the reusable route-related data contracts.
 export const BACKEND_URL =
   process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8080";
 

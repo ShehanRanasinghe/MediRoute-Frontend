@@ -1,8 +1,6 @@
 import { createTheme } from "@mui/material/styles";
 
-// Owner: Janiru
-// Same theme as Task 1/2 - reuse the existing lib/theme.ts if your project
-// already has one, don't create a second copy.
+// Keeps the app styling consistent across every screen and module in the project.
 export const theme = createTheme({
   palette: {
     mode: "light",

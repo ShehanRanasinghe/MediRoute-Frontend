@@ -1,7 +1,5 @@
 "use client";
 
-// Owner: Manura
-
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import FormControl from "@mui/material/FormControl";
@@ -19,7 +17,7 @@ interface RecommendationFormProps {
 
 const CONDITION_TYPES = ["CARDIAC", "TRAUMA", "GENERAL"];
 
-// Defaults roughly centered on the sample city used across all modules
+// Form collects patient details so the hospital ranking algorithm can recommend the best match.
 export default function RecommendationForm({ onSubmit, loading }: RecommendationFormProps) {
   const [conditionType, setConditionType] = useState("CARDIAC");
   const [latitude, setLatitude] = useState(6.9285);

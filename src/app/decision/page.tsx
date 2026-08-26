@@ -1,8 +1,5 @@
 "use client";
 
-// Owner: Manura
-// Route: /decision
-
 import { useState } from "react";
 import Container from "@mui/material/Container";
 import Paper from "@mui/material/Paper";
@@ -13,12 +10,15 @@ import RecommendationForm from "../../components/RecommendationForm";
 import RecommendationResultView from "../../components/RecommendationResultView";
 import { compareRecommendationAlgorithms, RecommendationResult } from "../../lib/decisionApi";
 
+// A direct comparison is useful here because the ranking outcome should stay the same while timing differs.
+// Both results are kept in local state so the final screen can show the same hospital order with speed trade-offs.
 export default function DecisionPage() {
   const [heapResult, setHeapResult] = useState<RecommendationResult | null>(null);
   const [fullSortResult, setFullSortResult] = useState<RecommendationResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // The patient coordinates are sent together with the condition type to compare how each ranking method handles location-aware hospital selection.
   async function handleSubmit(conditionType: string, latitude: number, longitude: number) {
     setLoading(true);
     setError(null);
@@ -44,7 +44,7 @@ export default function DecisionPage() {
         Best Hospital Recommendation
       </Typography>
       <Typography variant="subtitle1" sx={{ mb: 4 }}>
-        Task 4 — ranks hospitals by specialty match, distance, and bed availability.
+        Task 4 - ranks hospitals by specialty match, distance, and bed availability.
       </Typography>
 
       <Paper variant="outlined" sx={{ p: 3 }}>
