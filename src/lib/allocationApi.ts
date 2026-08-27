@@ -1,6 +1,7 @@
+import { BACKEND_URL } from "./api";
 
-
-const API_BASE_URL = "http://localhost:8080/api/allocation";
+// Module calls the allocation backend endpoints and defines the response structure for allocation results.
+const API_BASE_URL = `${BACKEND_URL}/api/allocation`;
 
 export interface PatientIncident {
   id: number;

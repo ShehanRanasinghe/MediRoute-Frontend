@@ -1,5 +1,3 @@
-// Owner: Manura
-
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -17,6 +15,7 @@ interface RecommendationResultViewProps {
   fullSort: RecommendationResult | null;
 }
 
+// Compares the execution time of the heap-based and full-sort ranking methods.
 function formatTime(nanos: number): string {
   return `${(nanos / 1_000_000).toFixed(3)} ms`;
 }
@@ -27,7 +26,7 @@ export default function RecommendationResultView({ heap, fullSort }: Recommendat
   return (
     <Card variant="outlined" sx={{ mt: 3 }}>
       <CardContent>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1} flexWrap="wrap" useFlexGap>
+        <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center", mb: 1, flexWrap: "wrap", gap: 1 }}>
           <Typography variant="h2">Recommended Hospitals</Typography>
           <Stack direction="row" spacing={1}>
             <Chip label={`Heap: ${formatTime(heap.executionTimeNanos)}`} size="small" color="secondary" variant="outlined" />
@@ -37,7 +36,7 @@ export default function RecommendationResultView({ heap, fullSort }: Recommendat
           </Stack>
         </Stack>
 
-        <Typography variant="body2" color="text.secondary" mb={1}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
           Both algorithms produce the same ranking below - the chips above compare their speed only.
         </Typography>
 

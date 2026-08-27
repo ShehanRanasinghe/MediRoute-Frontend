@@ -1,6 +1,7 @@
-// Owner: Janiru
+import { BACKEND_URL } from "./api";
 
-const API_BASE_URL = "http://localhost:8080/api/network";
+// Communicates with the network analysis endpoints for resilience and ranking calculations.
+const API_BASE_URL = `${BACKEND_URL}/api/network`;
 
 export interface CriticalNodeResult {
   criticalNodeIds: number[];

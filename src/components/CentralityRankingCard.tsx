@@ -1,5 +1,3 @@
-// Owner: Janiru
-
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
@@ -12,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { CentralityResult } from "../lib/networkApi";
 
+// Ranks the most important network nodes based on their connectedness.
 function formatTime(nanos: number): string {
   return `${(nanos / 1_000_000).toFixed(3)} ms`;
 }
@@ -20,7 +19,7 @@ export default function CentralityRankingCard({ result }: { result: CentralityRe
   return (
     <Card variant="outlined">
       <CardContent>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={1}>
+        <Stack direction="row" sx={{ justifyContent: "space-between", alignItems: "center", mb: 1 }}>
           <Typography variant="h2">Node Importance Ranking</Typography>
           <Chip label={formatTime(result.executionTimeNanos)} size="small" color="secondary" variant="outlined" />
         </Stack>

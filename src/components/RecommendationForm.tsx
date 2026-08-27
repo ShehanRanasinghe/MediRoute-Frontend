@@ -1,7 +1,5 @@
 "use client";
 
-// Owner: Manura
-
 import { useState } from "react";
 import Stack from "@mui/material/Stack";
 import FormControl from "@mui/material/FormControl";
@@ -19,14 +17,14 @@ interface RecommendationFormProps {
 
 const CONDITION_TYPES = ["CARDIAC", "TRAUMA", "GENERAL"];
 
-// Defaults roughly centered on the sample city used across all modules
+// Form collects patient details so the hospital ranking algorithm can recommend the best match.
 export default function RecommendationForm({ onSubmit, loading }: RecommendationFormProps) {
   const [conditionType, setConditionType] = useState("CARDIAC");
   const [latitude, setLatitude] = useState(6.9285);
   const [longitude, setLongitude] = useState(79.8625);
 
   return (
-    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} alignItems={{ sm: "flex-end" }} flexWrap="wrap" useFlexGap>
+    <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ alignItems: { sm: "flex-end" }, flexWrap: "wrap" }}>
       <FormControl size="small" sx={{ minWidth: 160 }}>
         <InputLabel id="condition-label">Condition</InputLabel>
         <Select

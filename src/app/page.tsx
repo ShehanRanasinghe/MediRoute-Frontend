@@ -1,14 +1,6 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-export default function Home() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push("/routing");
-  }, [router]);
-
-  return null;
+// Root page immediately sends the user to the dashboard as the app landing screen.
+export default function RootPage() {
+  redirect("/dashboard");
 }

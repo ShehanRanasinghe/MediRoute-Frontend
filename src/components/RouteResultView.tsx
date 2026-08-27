@@ -10,15 +10,32 @@ import { RouteResult } from "../lib/api";
 interface RouteResultViewProps {
   dijkstra: RouteResult | null;
   astar: RouteResult | null;
+  /** Map of nodeId -> nodeName, used to render human-readable path labels. */
+  nodeMap?: Record<number, string>;
 }
 
 function formatTime(nanos: number): string {
   return `${(nanos / 1_000_000).toFixed(3)} ms`;
 }
 
-function ResultCard({ result }: { result: RouteResult }) {
+function ResultCard({
+  result,
+  nodeMap,
+}: {
+  result: RouteResult;
+  nodeMap?: Record<number, string>;
+}) {
+  // path[] is List<Long> from backend — plain numbers, not objects.
+  // Resolve each ID to a name using nodeMap when available.
   const pathDisplay = Array.isArray(result.path)
-    ? result.path.map((node: any) => node.name || node.id || node).join(" → ")
+    ? result.path
+        .map((node: unknown) => {
+          const id = typeof node === "object" && node !== null
+            ? (node as { id?: number }).id ?? 0
+            : Number(node);
+          return nodeMap?.[id] ?? `Node #${id}`;
+        })
+        .join(" → ")
     : "";
 
   return (
@@ -32,7 +49,6 @@ function ResultCard({ result }: { result: RouteResult }) {
             mb: 1,
           }}
         >
-          {/* Fixed: Moved fontWeight into sx prop */}
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {result.algorithmUsed || "Algorithm Output"}
           </Typography>
@@ -58,7 +74,7 @@ function ResultCard({ result }: { result: RouteResult }) {
             <Divider sx={{ my: 1 }} />
 
             <Typography variant="body2" color="text.secondary">
-              Path
+              Path ({result.path.length} node{result.path.length !== 1 ? "s" : ""})
             </Typography>
             <Typography variant="body1">{pathDisplay}</Typography>
           </>
@@ -68,13 +84,13 @@ function ResultCard({ result }: { result: RouteResult }) {
   );
 }
 
-export default function RouteResultView({ dijkstra, astar }: RouteResultViewProps) {
+export default function RouteResultView({ dijkstra, astar, nodeMap }: RouteResultViewProps) {
   if (!dijkstra && !astar) return null;
 
   return (
     <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mt: 3 }}>
-      {dijkstra && <ResultCard result={dijkstra} />}
-      {astar && <ResultCard result={astar} />}
+      {dijkstra && <ResultCard result={dijkstra} nodeMap={nodeMap} />}
+      {astar && <ResultCard result={astar} nodeMap={nodeMap} />}
     </Stack>
   );
 }
