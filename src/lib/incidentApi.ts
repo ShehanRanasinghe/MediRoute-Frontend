@@ -43,10 +43,23 @@ export interface IncidentResponse {
 
 export interface IncidentReportRequest {
   patientReference?: string;
+  phoneNumber?: string;
   conditionType: string;
   severityScore: number;
   latitude: number;
   longitude: number;
+}
+
+export interface IncidentSummary {
+  id: number;
+  patientReference: string | null;
+  phoneNumber: string | null;
+  conditionType: string;
+  severityScore: number;
+  status: string;
+  latitude: number;
+  longitude: number;
+  createdAt: string;
 }
 
 export interface HospitalStatusView {
@@ -58,6 +71,7 @@ export interface HospitalStatusView {
 
 export interface DashboardSummary {
   pendingIncidents: number;
+  ongoingIncidents: number;
   availableAmbulances: number;
   criticalNodeCount: number;
   hospitals: HospitalStatusView[];
@@ -82,4 +96,14 @@ export async function getDashboardSummary(): Promise<DashboardSummary> {
 export async function resetDemoData(): Promise<void> {
   const response = await fetch(`${ADMIN_BASE_URL}/reset-demo-data`, { method: "POST" });
   if (!response.ok) throw new Error(`Reset failed: ${response.status}`);
+}
+
+// Admin panel only - includes phone numbers for verifying a report is
+// genuine. See IncidentSummaryView.java on the backend for the security
+// note on this endpoint (gated by the frontend admin login only, not by
+// the Spring Boot API itself).
+export async function getIncidentList(): Promise<IncidentSummary[]> {
+  const response = await fetch(`${API_BASE_URL}/list`);
+  if (!response.ok) throw new Error(`Incident list failed: ${response.status}`);
+  return response.json();
 }

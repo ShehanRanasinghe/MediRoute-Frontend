@@ -1,12 +1,13 @@
 "use client";
 
 // Emergency data is collected here before the dispatch pipeline matches a patient to a hospital, route, and supplies.
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
+import Autocomplete from "@mui/material/Autocomplete";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -25,39 +26,60 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import SendIcon from "@mui/icons-material/Send";
 import { reportIncident, IncidentResponse } from "../../../lib/incidentApi";
+import { getIncidentLocations, IncidentLocation } from "../../../lib/incidentLocationApi";
 
 const CONDITIONS = ["CARDIAC", "TRAUMA", "GENERAL"];
-const LOCATION_PRESETS = [
-  { label: "Near City Center", lat: 6.9285, lng: 79.8625 },
-  { label: "Northern Suburb", lat: 6.9420, lng: 79.8770 },
-  { label: "Western District", lat: 6.9200, lng: 79.8550 },
-];
+
+// Blocks special characters in the patient reference - allows letters,
+// numbers, spaces, and hyphens only (e.g. "REF-102" or "John D").
+const PATIENT_REFERENCE_PATTERN = /^[A-Za-z0-9\s-]*$/;
+
+// Accepts digits, spaces, +, and - only, 7-15 characters - loose enough
+// for local and international formats, strict enough to catch typos.
+const PHONE_PATTERN = /^[0-9+\-\s]{7,15}$/;
 
 export default function NewIncidentPage() {
-  // These fields hold the patient details used to create a realistic emergency case for the dispatch pipeline.
-  // The severity slider and location preset help simulate a realistic emergency without leaving the form.
   const [patientReference, setPatientReference] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [conditionType, setConditionType] = useState("CARDIAC");
   const [severity, setSeverity] = useState(7);
-  const [locationIndex, setLocationIndex] = useState(0);
+  const [locations, setLocations] = useState<IncidentLocation[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<IncidentLocation | null>(null);
+  const [locationsError, setLocationsError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<IncidentResponse | null>(null);
 
-  // The request is built from the selected preset location and the emergency severity so the backend can process one full response.
-  // The result is stored only after the backend responds, which keeps the UI clean while the request is still running.
+  // Locations now come from the database (admin-managed) instead of a
+  // hardcoded 3-item list, via a direct Supabase read - see
+  // lib/incidentLocationApi.ts.
+  useEffect(() => {
+    getIncidentLocations()
+      .then((locs) => {
+        setLocations(locs);
+        if (locs.length > 0) setSelectedLocation(locs[0]);
+      })
+      .catch(() => setLocationsError("Could not load incident locations from the database."));
+  }, []);
+
+  const referenceInvalid = patientReference !== "" && !PATIENT_REFERENCE_PATTERN.test(patientReference);
+  const phoneInvalid = phoneNumber !== "" && !PHONE_PATTERN.test(phoneNumber);
+  const canSubmit = !referenceInvalid && !phoneInvalid && selectedLocation !== null;
+
   async function handleSubmit() {
+    if (!canSubmit || !selectedLocation) return;
+
     setLoading(true);
     setError(null);
     setResult(null);
     try {
-      const location = LOCATION_PRESETS[locationIndex];
       const response = await reportIncident({
         patientReference: patientReference || undefined,
+        phoneNumber: phoneNumber || undefined,
         conditionType,
         severityScore: severity,
-        latitude: location.lat,
-        longitude: location.lng,
+        latitude: selectedLocation.latitude,
+        longitude: selectedLocation.longitude,
       });
       setResult(response);
     } catch (err) {
@@ -83,6 +105,20 @@ export default function NewIncidentPage() {
             label="Patient Reference (optional)"
             value={patientReference}
             onChange={(e) => setPatientReference(e.target.value)}
+            error={referenceInvalid}
+            helperText={referenceInvalid ? "Letters, numbers, spaces, and hyphens only - no special characters." : " "}
+          />
+
+          <TextField
+            label="Contact Phone Number (optional)"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            error={phoneInvalid}
+            helperText={
+              phoneInvalid
+                ? "Enter a valid phone number (digits, spaces, + and - only, 7-15 characters)."
+                : "Used by admins to verify this report is genuine - not shown publicly."
+            }
           />
 
           <FormControl>
@@ -112,26 +148,24 @@ export default function NewIncidentPage() {
             />
           </Box>
 
-          <FormControl>
-            <InputLabel id="location-label">Incident Location</InputLabel>
-            <Select
-              labelId="location-label"
-              label="Incident Location"
-              value={locationIndex}
-              onChange={(e) => setLocationIndex(Number(e.target.value))}
-            >
-              {LOCATION_PRESETS.map((loc, idx) => (
-                <MenuItem key={loc.label} value={idx}>{loc.label}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <Autocomplete
+            options={locations}
+            getOptionLabel={(loc) => loc.name}
+            value={selectedLocation}
+            onChange={(_, value) => setSelectedLocation(value)}
+            isOptionEqualToValue={(a, b) => a.id === b.id}
+            renderInput={(params) => (
+              <TextField {...params} label="Incident Location" placeholder="Type to search..." />
+            )}
+          />
+          {locationsError && <Alert severity="error">{locationsError}</Alert>}
 
           <Button
             variant="contained"
             size="large"
             startIcon={<SendIcon />}
             onClick={handleSubmit}
-            disabled={loading}
+            disabled={loading || !canSubmit}
           >
             {loading ? "Processing..." : "Dispatch Response"}
           </Button>
